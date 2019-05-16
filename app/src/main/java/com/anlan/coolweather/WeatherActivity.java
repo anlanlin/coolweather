@@ -1,5 +1,6 @@
 package com.anlan.coolweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.anlan.coolweather.gson.Forecast;
 import com.anlan.coolweather.gson.Weather;
+import com.anlan.coolweather.service.AutoUpdateService;
 import com.anlan.coolweather.util.HttpUtil;
 import com.anlan.coolweather.util.Utility;
 import com.bumptech.glide.Glide;
@@ -160,6 +162,7 @@ public class WeatherActivity extends AppCompatActivity {
                                     PreferenceManager
                                             .getDefaultSharedPreferences(WeatherActivity.this)
                                     .edit();
+                            editor.putString("weather", responseText);
                             editor.apply();
                             mWeatherId = weather.basic.weatherId;
                             showWeatherInfo(weather);
@@ -210,6 +213,8 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
     private void loadBingPic(){
